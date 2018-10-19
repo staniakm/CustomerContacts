@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class CustomerController {
 
+    private final CustomerDao customerDao;
+
     @Autowired
-    private CustomerDao customerDao;
+    public CustomerController(CustomerDao customerDao) {
+        this.customerDao = customerDao;
+    }
 
     @GetMapping(value = "/customers")
     public ResponseEntity<List<Customer>> getCustomers(){
