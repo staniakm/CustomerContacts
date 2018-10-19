@@ -1,14 +1,20 @@
 package com.mariusz.contacts.entity;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class Customer {
     private long id;
     private String name;
     private String surname;
     private String age;
 
+    public Customer(String name, String surname, String age) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+    }
+
+    public Customer() {
+    }
 }

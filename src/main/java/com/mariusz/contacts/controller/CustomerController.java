@@ -5,9 +5,7 @@ import com.mariusz.contacts.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +25,21 @@ public class CustomerController {
 
         return new ResponseEntity<>(customerDao.listCustomers(),HttpStatus.OK);
     }
+
+    @GetMapping(value = "/customers/{id}")
+    public ResponseEntity<Customer> getCustomer(@PathVariable("id") Long id){
+        return customerDao.getCustomer(id).map(customer -> new ResponseEntity<>(customer, HttpStatus.OK)).orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping(value = "/customers/{id}")
+    public ResponseEntity deleteCustomer(@PathVariable("id") Long id){
+        customerDao.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping(value = "/customers")
+    public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
+        return new ResponseEntity<>(customerDao.create(customer), HttpStatus.OK);
+    }
+
 }

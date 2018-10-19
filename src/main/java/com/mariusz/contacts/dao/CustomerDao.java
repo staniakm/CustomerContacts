@@ -2,13 +2,15 @@ package com.mariusz.contacts.dao;
 import com.mariusz.contacts.entity.Customer;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface CustomerDao {
 
-    void create(String name, String surname, String age);
+    Customer create(String name, String surname, String age);
+    Customer create(Customer customer);
 
-    Customer getCustomer(Long id);
+    Optional<Customer> getCustomer(Long id);
 
     List<Customer> listCustomers();
 
