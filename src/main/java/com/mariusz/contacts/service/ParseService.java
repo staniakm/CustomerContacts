@@ -4,27 +4,32 @@ import com.mariusz.contacts.dao.ContactDao;
 import com.mariusz.contacts.dao.CustomerDao;
 import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.entity.Customer;
-import com.mariusz.contacts.helpers.ContactVaidator;
+import com.mariusz.contacts.helpers.ContactTypeValidator;
+import com.mariusz.contacts.parser.MyHandler;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.util.List;
 
 
 @Service
-public class UploadService {
+public class ParseService {
     private final ContactDao contactDao;
     private final CustomerDao customerDao;
-    private final ContactVaidator contactVaidator;
 
     @Autowired
-    public UploadService(ContactDao contactDao, CustomerDao customerDao, ContactVaidator contactVaidator) {
+    public ParseService(ContactDao contactDao, CustomerDao customerDao) {
         this.contactDao = contactDao;
         this.customerDao = customerDao;
-        this.contactVaidator = contactVaidator;
     }
 
     public void parseFile(MultipartFile file) throws IOException {
@@ -34,7 +39,7 @@ public class UploadService {
                 loadXmlFile(file);
                 break;
             case "text/plain":
-                loadCSVFile(file);
+                parseCSVFile(file);
                 break;
         }
 
@@ -42,15 +47,36 @@ public class UploadService {
 
 
     private void loadXmlFile(MultipartFile file) throws IOException{
-        System.out.println(file.getContentType());
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        try {
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            MyHandler handler = new MyHandler();
+            try(InputStream stream = file.getInputStream()) {
+                Reader reader = new InputStreamReader(stream,"UTF-8");
+                InputSource is = new InputSource(reader);
+                is.setEncoding("UTF-8");
+
+                saxParser.parse(stream, handler);
+            }
+            List<Customer> customersList = handler.getCustomerList();
+            for (Customer customer : customersList) {
+                customerDao.create(customer);
+                for (Contact contact: customer.getContacts()
+                     ) {
+                    contact.setCustomer_id(customer.getId());
+                    contactDao.create(contact);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private void loadCSVFile(MultipartFile file) throws IOException {
-        System.out.println(file.getContentType());
+    private void parseCSVFile(MultipartFile file) throws IOException {
         try(InputStream stream = file.getInputStream()) {
-            try(BufferedReader reader1 = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
-                Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(reader1);
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
+                Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(reader);
                 for (CSVRecord record : records) {
                     Customer customer = new Customer();
                     customer.setName(record.get(0));
@@ -61,7 +87,7 @@ public class UploadService {
                         for (int i = 4; i < record.size(); i++) {
                             Contact contact = new Contact();
                             contact.setCustomer_id(customer.getId());
-                            contact.setType(contactVaidator.validateContactType(record.get(i)));
+                            contact.setType(ContactTypeValidator.validate(record.get(i)));
                             contact.setContact(record.get(i));
                             contactDao.create(contact);
                         }
