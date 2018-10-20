@@ -2,6 +2,8 @@ package com.mariusz.contacts.controller;
 
 import com.mariusz.contacts.dao.CustomerDao;
 import com.mariusz.contacts.entity.Customer;
+import com.mariusz.contacts.jdbc.CustomerJDBCTemplate;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class CustomerController {
 
-    private final CustomerDao customerDao;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomerJDBCTemplate.class);
 
+    private final CustomerDao customerDao;
     @Autowired
     public CustomerController(CustomerDao customerDao) {
         this.customerDao = customerDao;
@@ -41,5 +44,7 @@ public class CustomerController {
     public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
         return new ResponseEntity<>(customerDao.create(customer), HttpStatus.OK);
     }
+
+
 
 }
