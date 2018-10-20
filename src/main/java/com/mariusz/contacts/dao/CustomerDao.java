@@ -16,4 +16,5 @@ public interface CustomerDao {
 
     void delete(Long id);
 
+    void batchStore(List<Customer> customerList);
 }

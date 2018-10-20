@@ -21,7 +21,6 @@ public class CustomerJDBCTemplate implements CustomerDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerJDBCTemplate.class);
 
-
     private final JdbcTemplate jdbcTemplateObject;
 
     @Autowired
@@ -81,5 +80,14 @@ public class CustomerJDBCTemplate implements CustomerDao {
         String SQL = "delete from CUSTOMERS where id = ?";
         jdbcTemplateObject.update(SQL, id);
         System.out.println("Deleted Record with ID = " + id );
+    }
+
+    @Override
+    public void batchStore(List<Customer> customerList) {
+
+        for (Customer customer: customerList
+             ) {
+
+        }
     }
 }
