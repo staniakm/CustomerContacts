@@ -1,11 +1,8 @@
 package com.mariusz.contacts.jdbc;
 
 import com.mariusz.contacts.dao.ContactDao;
-import com.mariusz.contacts.dao.CustomerDao;
 import com.mariusz.contacts.entity.Contact;
-import com.mariusz.contacts.entity.Customer;
 import com.mariusz.contacts.mapper.ContactMapper;
-import com.mariusz.contacts.mapper.CustomerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
 @Repository
 public class ContactJDBCTemplate implements ContactDao {
 
@@ -72,15 +70,13 @@ public class ContactJDBCTemplate implements ContactDao {
     @Transactional(readOnly = true)
     public List<Contact> listCustomerContacts(Long customerId) {
         String SQL = "select * from CONTACTS where ID_CUSTOMER  = ?";
-        List <Contact> contacts = jdbcTemplateObject.query(SQL, new ContactMapper());
-        return contacts;
+        return jdbcTemplateObject.query(SQL, new ContactMapper());
     }
 
     @Override
     public List<Contact> listContacts() {
         String SQL = "select * from CONTACTS";
-        List <Contact> contacts = jdbcTemplateObject.query(SQL, new ContactMapper());
-        return contacts;
+        return jdbcTemplateObject.query(SQL, new ContactMapper());
     }
 
     @Override

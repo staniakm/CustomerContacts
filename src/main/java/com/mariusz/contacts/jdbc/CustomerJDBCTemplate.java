@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
 @Repository
 public class CustomerJDBCTemplate implements CustomerDao {
 
@@ -71,8 +72,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
     @Transactional(readOnly = true)
     public List<Customer> listCustomers() {
         String SQL = "select * from CUSTOMERS";
-        List <Customer> customers = jdbcTemplateObject.query(SQL, new CustomerMapper());
-        return customers;
+        return jdbcTemplateObject.query(SQL, new CustomerMapper());
     }
 
     @Override
@@ -82,12 +82,4 @@ public class CustomerJDBCTemplate implements CustomerDao {
         System.out.println("Deleted Record with ID = " + id );
     }
 
-    @Override
-    public void batchStore(List<Customer> customerList) {
-
-        for (Customer customer: customerList
-             ) {
-
-        }
-    }
 }

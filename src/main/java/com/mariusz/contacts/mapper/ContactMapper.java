@@ -1,9 +1,8 @@
 package com.mariusz.contacts.mapper;
 
 import com.mariusz.contacts.entity.Contact;
-import com.mariusz.contacts.entity.Customer;
-
 import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

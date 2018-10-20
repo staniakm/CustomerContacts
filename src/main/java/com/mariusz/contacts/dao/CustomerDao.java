@@ -15,6 +15,4 @@ public interface CustomerDao {
     List<Customer> listCustomers();
 
     void delete(Long id);
-
-    void batchStore(List<Customer> customerList);
 }
