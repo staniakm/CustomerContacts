@@ -25,9 +25,7 @@ public class ContactTypeValidator {
 
     private static boolean isPhoneNumber(String contact){
         String isbnPattern = "([^\\d])+";
-        if (contact!=null)
             return contact.replaceAll(isbnPattern,"").length()==9;
-        return false;
     }
 
     private static boolean isValidEmail(String contact) {

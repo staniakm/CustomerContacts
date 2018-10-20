@@ -85,11 +85,14 @@ public class ParseService {
                         customerDao.create(customer);
                         if (record.size() > 4) {
                             for (int i = 4; i < record.size(); i++) {
-                                Contact contact = new Contact();
-                                contact.setCustomer_id(customer.getId());
-                                contact.setType(ContactTypeValidator.validate(record.get(i)));
-                                contact.setContact(record.get(i));
-                                contactDao.create(contact);
+                                // not add contact with empty string
+                                if (!(record.get(i).trim().length()==0 || record.get(i).isEmpty())) {
+                                    Contact contact = new Contact();
+                                    contact.setCustomer_id(customer.getId());
+                                    contact.setType(ContactTypeValidator.validate(record.get(i)));
+                                    contact.setContact(record.get(i));
+                                    contactDao.create(contact);
+                                }
                             }
                         }
                     }

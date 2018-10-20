@@ -24,10 +24,6 @@ public class Customer {
     public Customer() {
     }
 
-    public void addContact(Contact contact){
-        contacts.add(contact);
-    }
-
     @Override
     public String toString() {
         return "Customer{" +
