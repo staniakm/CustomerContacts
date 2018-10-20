@@ -74,7 +74,7 @@ public class ContactJDBCTemplate implements ContactDao {
     }
 
     @Override
-    public List<Contact> listContacts() {
+    public List<Contact> getAll() {
         String SQL = "select * from CONTACTS";
         return jdbcTemplateObject.query(SQL, new ContactMapper());
     }
