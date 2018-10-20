@@ -36,17 +36,16 @@ public class ParseService {
 
         switch (file.getContentType()){
             case "application/xml":
-                loadXmlFile(file);
+                parseXMLFile(file);
                 break;
             case "text/plain":
                 parseCSVFile(file);
                 break;
         }
-
     }
 
 
-    private void loadXmlFile(MultipartFile file) throws IOException{
+    private void parseXMLFile(MultipartFile file) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
             SAXParser saxParser = saxParserFactory.newSAXParser();
@@ -92,7 +91,6 @@ public class ParseService {
                             contactDao.create(contact);
                         }
                     }
-                    System.out.println("==========================");
                 }
             }
         }
