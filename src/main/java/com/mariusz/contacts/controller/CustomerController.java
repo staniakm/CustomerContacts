@@ -30,12 +30,21 @@ public class CustomerController {
         this.contactService = contactService;
     }
 
+
+    /***
+     * Display all saved customers
+     * @return list of customers
+     */
     @GetMapping(value = "")
     public ResponseEntity<List<Customer>> getCustomers(){
-
         return new ResponseEntity<>(customerService.getAllCustomers(),HttpStatus.OK);
     }
 
+    /***
+     * display selected customer. If customer with selected id is not exist, 404 status will be display
+     * @param id - customer id
+     * @return - selected customer data
+     */
     @GetMapping(value = "/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable("id") Long id){
         return customerService
@@ -44,6 +53,11 @@ public class CustomerController {
                 .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /***
+     * Display all contacts that belong to selected customer. If customer with selected id is not exist, 404 status will be display
+     * @param id - customer id
+     * @return - list of all contacts that as assigned to selected customer
+     */
     @GetMapping(value = "/{id}/contacts")
     public ResponseEntity<List<Contact>> getCustomerContacts(@PathVariable("id") Long id){
         return customerService
@@ -52,6 +66,12 @@ public class CustomerController {
                 .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
+    /***
+     * Delete selected customer if exist. All contacts that are assigned to customer will be also deleted.
+     * @param id - customer id
+     * @return - status 204 will be returned
+     */
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteCustomer(@PathVariable("id") Long id){
         customerService.deleteCustomer(id);
@@ -59,11 +79,29 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /***
+     * Post new customer.
+     * @param customer - json representation of customer.
+     * @return - created customer. Status 201 will be returned.
+     */
     @PostMapping(value = "")
     public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
-        return new ResponseEntity<>(customerService.createCustomer(customer), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.createCustomer(customer), HttpStatus.CREATED);
     }
 
 
+    /***
+     * Post new customer.
+     * @param customerId - id of customer for which new contact will be added
+     * @param contact- json representation of new contact.
+     * @return - created customer. Status 201 will be returned.
+     */
+    @PostMapping(value = "/{id}/contact")
+    public ResponseEntity<Contact> createCustomer(@PathVariable("id") Long customerId, @RequestBody Contact contact){
+        return customerService
+                .getCustomerById(customerId)
+                .map(customer -> new ResponseEntity<>(contactService.createContact(customer, contact), HttpStatus.CREATED))
+                .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+    }
 }
