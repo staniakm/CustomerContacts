@@ -77,18 +77,20 @@ public class ParseService {
             try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
                 Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(reader);
                 for (CSVRecord record : records) {
-                    Customer customer = new Customer();
-                    customer.setName(record.get(0));
-                    customer.setSurname(record.get(1));
-                    customer.setAge(record.get(2));
-                    customerDao.create(customer);
-                    if (record.size() > 4) {
-                        for (int i = 4; i < record.size(); i++) {
-                            Contact contact = new Contact();
-                            contact.setCustomer_id(customer.getId());
-                            contact.setType(ContactTypeValidator.validate(record.get(i)));
-                            contact.setContact(record.get(i));
-                            contactDao.create(contact);
+                    if (record.size() >= 3) {
+                        Customer customer = new Customer();
+                        customer.setName(record.get(0));
+                        customer.setSurname(record.get(1));
+                        customer.setAge(record.get(2));
+                        customerDao.create(customer);
+                        if (record.size() > 4) {
+                            for (int i = 4; i < record.size(); i++) {
+                                Contact contact = new Contact();
+                                contact.setCustomer_id(customer.getId());
+                                contact.setType(ContactTypeValidator.validate(record.get(i)));
+                                contact.setContact(record.get(i));
+                                contactDao.create(contact);
+                            }
                         }
                     }
                 }
