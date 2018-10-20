@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     @SuppressWarnings("unused")
@@ -29,13 +29,13 @@ public class CustomerController {
         this.contactService = contactService;
     }
 
-    @GetMapping(value = "/customers")
+    @GetMapping(value = "")
     public ResponseEntity<List<Customer>> getCustomers(){
 
         return new ResponseEntity<>(customerService.getAllCustomers(),HttpStatus.OK);
     }
 
-    @GetMapping(value = "/customers/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable("id") Long id){
         return customerService
                 .getCustomerById(id)
@@ -43,14 +43,14 @@ public class CustomerController {
                 .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping(value = "/customers/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteCustomer(@PathVariable("id") Long id){
         customerService.deleteCustomer(id);
         contactService.deleteCustomerContacts(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(value = "/customers")
+    @PostMapping(value = "")
     public ResponseEntity<Customer> createCustomer(@RequestBody final Customer customer){
         return new ResponseEntity<>(customerService.createCustomer(customer), HttpStatus.OK);
     }
