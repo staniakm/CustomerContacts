@@ -55,7 +55,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Customer> getCustomer(Long id) {
+    public Optional<Customer> getCustomerById(Long id) {
         final String SQL = "select * from CUSTOMERS where id = ?";
         Customer customer = null;
         try {

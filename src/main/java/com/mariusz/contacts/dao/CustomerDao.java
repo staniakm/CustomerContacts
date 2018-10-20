@@ -10,7 +10,7 @@ public interface CustomerDao {
     Customer create(String name, String surname, String age);
     Customer create(Customer customer);
 
-    Optional<Customer> getCustomer(Long id);
+    Optional<Customer> getCustomerById(Long id);
 
     List<Customer> listCustomers();
 
