@@ -31,4 +31,13 @@ public class ContactService {
     public List<Contact> getCustomerContacts(Customer customer){
         return getCustomerContacts(customer.getId());
     }
+
+    public Contact createContact(Customer customer, Contact contact) {
+        contact.setCustomer_id(customer.getId());
+      return contactDao.create(contact);
+    }
+
+    public void deleteContact(Long id) {
+        contactDao.deleteContact(id);
+    }
 }

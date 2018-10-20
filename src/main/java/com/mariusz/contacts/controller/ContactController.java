@@ -4,9 +4,7 @@ import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.service.ContactService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +18,18 @@ public class ContactController {
         this.contactService = contactService;
     }
 
+    /***
+     * Display list of all contacts
+     * @return - status 200 will be returned
+     */
     @GetMapping("")
     public ResponseEntity<List<Contact>> getAllContacts(){
         return new ResponseEntity<>(contactService.getAllContacts(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Contact> delteContact(@PathVariable ("id") Long id){
+        contactService.deleteContact(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
