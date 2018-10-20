@@ -27,6 +27,11 @@ public class ContactController {
         return new ResponseEntity<>(contactService.getAllContacts(), HttpStatus.OK);
     }
 
+    /***
+     * delete selected contact
+     * @param id - contact id
+     * @return - status 204 will be returned
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<Contact> delteContact(@PathVariable ("id") Long id){
         contactService.deleteContact(id);
