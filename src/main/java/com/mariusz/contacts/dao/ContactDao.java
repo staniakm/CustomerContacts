@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface ContactDao {
 
-    Contact create(Long contactId, int type, String contact);
-
     Contact create(Contact contact);
 
     Optional<Contact> getContact(Long id);

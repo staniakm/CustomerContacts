@@ -29,11 +29,6 @@ public class ContactJDBCTemplate implements ContactDao {
         this.jdbcTemplateObject = jdbcTemplateObject;
     }
 
-    @Override
-    public Contact create(Long contactId, int type, String contactValue) {
-        Contact contact = new Contact(contactId, type, contactValue);
-        return create(contact);
-    }
 
     public Contact create(Contact contact) {
         final String SQL = "insert into CONTACTS (ID_CUSTOMER, TYPE, CONTACT) values (?, ?, ?)";
