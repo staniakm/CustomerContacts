@@ -1,5 +1,6 @@
 package com.mariusz.contacts.controller;
 
+import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.entity.Customer;
 import com.mariusz.contacts.jdbc.CustomerJDBCTemplate;
 import com.mariusz.contacts.service.ContactService;
@@ -40,6 +41,14 @@ public class CustomerController {
         return customerService
                 .getCustomerById(id)
                 .map(customer -> new ResponseEntity<>(customer, HttpStatus.OK))
+                .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/{id}/contacts")
+    public ResponseEntity<List<Contact>> getCustomerContacts(@PathVariable("id") Long id){
+        return customerService
+                .getCustomerById(id)
+                .map(customer -> new ResponseEntity<>(contactService.getCustomerContacts(customer), HttpStatus.OK))
                 .orElseGet(()-> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 

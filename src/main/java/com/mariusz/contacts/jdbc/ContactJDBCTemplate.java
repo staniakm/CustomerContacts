@@ -70,10 +70,11 @@ public class ContactJDBCTemplate implements ContactDao {
     @Transactional(readOnly = true)
     public List<Contact> listCustomerContacts(Long customerId) {
         String SQL = "select * from CONTACTS where ID_CUSTOMER  = ?";
-        return jdbcTemplateObject.query(SQL, new ContactMapper());
+        return jdbcTemplateObject.query(SQL,new Object[]{customerId}, new ContactMapper());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Contact> getAll() {
         String SQL = "select * from CONTACTS";
         return jdbcTemplateObject.query(SQL, new ContactMapper());
