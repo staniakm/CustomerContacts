@@ -23,6 +23,11 @@ public class UploadController {
         this.parseService = parseService;
     }
 
+    /***
+     * Upload file for parsing.
+     * @param file - multipart file
+     * @return - return status.
+     */
     @PostMapping(value = "")
     public ResponseEntity<Customer> bulkLoadData(@RequestParam("file") MultipartFile file){
         try {

@@ -16,7 +16,7 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers() {
-        return customerDao.listCustomers();
+        return customerDao.findAll();
     }
 
     public Optional<Customer> getCustomerById(Long id) {

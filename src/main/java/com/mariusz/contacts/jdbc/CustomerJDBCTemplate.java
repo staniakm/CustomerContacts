@@ -70,7 +70,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Customer> listCustomers() {
+    public List<Customer> findAll() {
         String SQL = "select * from CUSTOMERS";
         return jdbcTemplateObject.query(SQL, new CustomerMapper());
     }

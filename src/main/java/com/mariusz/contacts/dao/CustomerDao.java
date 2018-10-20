@@ -12,7 +12,7 @@ public interface CustomerDao {
 
     Optional<Customer> getCustomerById(Long id);
 
-    List<Customer> listCustomers();
+    List<Customer> findAll();
 
     void delete(Long id);
 }
