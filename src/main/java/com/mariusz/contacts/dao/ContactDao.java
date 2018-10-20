@@ -16,5 +16,7 @@ public interface ContactDao {
     List<Contact> listCustomerContacts(Long customerId);
     List<Contact> listContacts();
 
-    void delete(Long id);
+    void deleteContact(Long id);
+
+    void deleteCustomerContacts(Long id);
 }

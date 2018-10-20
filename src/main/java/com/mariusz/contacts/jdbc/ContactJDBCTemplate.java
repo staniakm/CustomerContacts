@@ -84,10 +84,15 @@ public class ContactJDBCTemplate implements ContactDao {
     }
 
     @Override
-    public void delete(Long id) {
-        String SQL = "delete from CUSTOMERS where id = ?";
+    public void deleteContact(Long id) {
+        String SQL = "delete from CONTACTS where id = ?";
         jdbcTemplateObject.update(SQL, id);
-        System.out.println("Deleted Record with ID = " + id );
+    }
+
+    @Override
+    public void deleteCustomerContacts(Long id) {
+        String SQL = "delete from CONTACTS where id_customer = ?";
+        jdbcTemplateObject.update(SQL, id);
     }
 
 }

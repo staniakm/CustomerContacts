@@ -2,6 +2,7 @@ package com.mariusz.contacts.controller;
 
 import com.mariusz.contacts.entity.Customer;
 import com.mariusz.contacts.jdbc.CustomerJDBCTemplate;
+import com.mariusz.contacts.service.ContactService;
 import com.mariusz.contacts.service.CustomerService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,14 @@ public class CustomerController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomerJDBCTemplate.class);
 
     private final CustomerService customerService;
+    private final ContactService contactService;
 
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, ContactService contactService) {
         this.customerService = customerService;
-            }
+        this.contactService = contactService;
+    }
 
     @GetMapping(value = "/customers")
     public ResponseEntity<List<Customer>> getCustomers(){
@@ -43,6 +46,7 @@ public class CustomerController {
     @DeleteMapping(value = "/customers/{id}")
     public ResponseEntity deleteCustomer(@PathVariable("id") Long id){
         customerService.deleteCustomer(id);
+        contactService.deleteCustomerContacts(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
