@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class CustomerController {
 
+    @SuppressWarnings("unused")
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomerJDBCTemplate.class);
 
     private final CustomerDao customerDao;

@@ -2,7 +2,7 @@ package com.mariusz.contacts.controller;
 
 import com.mariusz.contacts.entity.Customer;
 import com.mariusz.contacts.jdbc.CustomerJDBCTemplate;
-import com.mariusz.contacts.service.UploadService;
+import com.mariusz.contacts.service.ParseService;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +17,16 @@ public class UploadController {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomerJDBCTemplate.class);
 
-    private final UploadService uploadService;
+    private final ParseService parseService;
 
-    public UploadController(UploadService uploadService) {
-        this.uploadService = uploadService;
+    public UploadController(ParseService parseService) {
+        this.parseService = parseService;
     }
 
-    @PostMapping(value = "/bulkLoad")
+    @PostMapping(value = "")
     public ResponseEntity<Customer> bulkLoadData(@RequestParam("file") MultipartFile file){
         try {
-            uploadService.parseFile(file);
+            parseService.parseFile(file);
         } catch (IOException e) {
             LOGGER.warn(e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
