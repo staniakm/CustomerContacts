@@ -3,9 +3,11 @@ package com.mariusz.contacts.service;
 import com.mariusz.contacts.dao.ContactDao;
 import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.entity.Customer;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -39,5 +41,9 @@ public class ContactService {
 
     public void deleteContact(Long id) {
         contactDao.deleteContact(id);
+    }
+
+    public Optional<Contact> getContactById(Long contactId) {
+        return contactDao.getContact(contactId);
     }
 }

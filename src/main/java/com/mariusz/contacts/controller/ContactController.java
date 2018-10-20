@@ -23,9 +23,23 @@ public class ContactController {
      * @return - status 200 will be returned
      */
     @GetMapping("")
-    public ResponseEntity<List<Contact>> getAllContacts(){
+    public ResponseEntity<List<Contact>> getAllContacts() {
         return new ResponseEntity<>(contactService.getAllContacts(), HttpStatus.OK);
     }
+
+    /***
+     * Display selected contact
+     * @param contactId - contact id
+     * @return - if exists selected contact will be returned else 404 status will be returned
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Contact> getContact(@PathVariable("id") Long contactId) {
+        return contactService
+                .getContactById(contactId)
+                .map(contact -> new ResponseEntity<>(contact, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
     /***
      * delete selected contact
@@ -33,7 +47,7 @@ public class ContactController {
      * @return - status 204 will be returned
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<Contact> delteContact(@PathVariable ("id") Long id){
+    public ResponseEntity<Contact> delteContact(@PathVariable("id") Long id) {
         contactService.deleteContact(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
