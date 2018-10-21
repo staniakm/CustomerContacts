@@ -5,7 +5,7 @@ import com.mariusz.contacts.dao.CustomerDao;
 import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.entity.Customer;
 import com.mariusz.contacts.helpers.ContactTypeValidator;
-import com.mariusz.contacts.parser.MyHandler;
+import com.mariusz.contacts.parser.XMLHandler;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class ParseService {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
             SAXParser saxParser = saxParserFactory.newSAXParser();
-            MyHandler handler = new MyHandler();
+            XMLHandler handler = new XMLHandler();
             try(InputStream stream = file.getInputStream()) {
                 Reader reader = new InputStreamReader(stream,"UTF-8");
                 InputSource is = new InputSource(reader);
@@ -77,21 +77,16 @@ public class ParseService {
             try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
                 Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(reader);
                 for (CSVRecord record : records) {
+                    // process only if record size is at least 3 (name, surname, age)
                     if (record.size() >= 3) {
-                        Customer customer = new Customer();
-                        customer.setName(record.get(0));
-                        customer.setSurname(record.get(1));
-                        customer.setAge(record.get(2));
-                        customerDao.create(customer);
+                        Customer customer = createCustomer(record);
+                        // all data greater then 4 should be considered as contact data
                         if (record.size() > 4) {
                             for (int i = 4; i < record.size(); i++) {
-                                // not add contact with empty string
-                                if (!(record.get(i).trim().length()==0 || record.get(i).isEmpty())) {
-                                    Contact contact = new Contact();
-                                    contact.setCustomer_id(customer.getId());
-                                    contact.setType(ContactTypeValidator.validate(record.get(i)));
-                                    contact.setContact(record.get(i));
-                                    contactDao.create(contact);
+                                // don't add contact with empty string
+                                String contactData = record.get(i);
+                                if (!(contactData.trim().length()==0 || contactData.isEmpty())) {
+                                    createContact(customer, contactData);
                                 }
                             }
                         }
@@ -99,5 +94,22 @@ public class ParseService {
                 }
             }
         }
+    }
+
+    private void createContact(Customer customer, String contactData) {
+        Contact contact = new Contact();
+        contact.setCustomer_id(customer.getId());
+        contact.setType(ContactTypeValidator.validate(contactData));
+        contact.setContact(contactData);
+        contactDao.create(contact);
+    }
+
+    private Customer createCustomer(CSVRecord record) {
+        Customer customer = new Customer();
+        customer.setName(record.get(0));
+        customer.setSurname(record.get(1));
+        customer.setAge(record.get(2));
+        customerDao.create(customer);
+        return customer;
     }
 }

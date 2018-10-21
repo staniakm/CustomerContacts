@@ -30,6 +30,11 @@ public class ContactJDBCTemplate implements ContactDao {
     }
 
 
+    /***
+     * create new contact in database
+     * @param contact - contact data
+     * @return - newly created contact
+     */
     public Contact create(Contact contact) {
         final String SQL = "insert into CONTACTS (ID_CUSTOMER, TYPE, CONTACT) values (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -47,6 +52,11 @@ public class ContactJDBCTemplate implements ContactDao {
         return contact;
     }
 
+    /***
+     * retrieve contact from database based on provided id
+     * @param id - contact id
+     * @return - optional contact.
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Contact> getContact(Long id) {
@@ -61,6 +71,11 @@ public class ContactJDBCTemplate implements ContactDao {
         return Optional.ofNullable(contact);
     }
 
+    /***
+     * get all contact for specified customer
+     * @param customerId -
+     * @return - list of contacts
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Contact> listCustomerContacts(Long customerId) {
@@ -68,6 +83,10 @@ public class ContactJDBCTemplate implements ContactDao {
         return jdbcTemplateObject.query(SQL,new Object[]{customerId}, new ContactMapper());
     }
 
+    /***
+     * get all contacts form database
+     * @return - list
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Contact> getAll() {
@@ -75,16 +94,24 @@ public class ContactJDBCTemplate implements ContactDao {
         return jdbcTemplateObject.query(SQL, new ContactMapper());
     }
 
+    /***
+     * delete specified contact
+     * @param id - contact id
+     */
     @Override
     public void deleteContact(Long id) {
         String SQL = "delete from CONTACTS where id = ?";
         jdbcTemplateObject.update(SQL, id);
     }
 
+    /***
+     * delete all contacts assigned to specified customer
+     * @param customerId - customer id
+     */
     @Override
-    public void deleteCustomerContacts(Long id) {
+    public void deleteCustomerContacts(Long customerId) {
         String SQL = "delete from CONTACTS where id_customer = ?";
-        jdbcTemplateObject.update(SQL, id);
+        jdbcTemplateObject.update(SQL, customerId);
     }
 
 }

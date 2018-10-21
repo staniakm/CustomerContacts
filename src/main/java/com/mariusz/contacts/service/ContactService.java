@@ -3,7 +3,6 @@ package com.mariusz.contacts.service;
 import com.mariusz.contacts.dao.ContactDao;
 import com.mariusz.contacts.entity.Contact;
 import com.mariusz.contacts.entity.Customer;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

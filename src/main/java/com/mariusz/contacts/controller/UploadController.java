@@ -29,7 +29,7 @@ public class UploadController {
      * @return - return status.
      */
     @PostMapping(value = "")
-    public ResponseEntity<Customer> bulkLoadData(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<Customer> loadBulkData(@RequestParam("file") MultipartFile file){
         try {
             parseService.parseFile(file);
         } catch (IOException e) {

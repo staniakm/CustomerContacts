@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyHandler extends DefaultHandler {
+public class XMLHandler extends DefaultHandler {
 
     private List<Customer> customerList = null;
     private List<Contact> contacts = null;
@@ -47,7 +47,7 @@ public class MyHandler extends DefaultHandler {
             age = true;
         } else if (qName.equalsIgnoreCase("contacts")) {
             contacts = new ArrayList<>();
-            //mark that contacts part will be processed now
+            //mark that contacts part of xml will be processed now
             bContacts = true;
         } else if (qName.equalsIgnoreCase("phone")) {
             cPhone = true;
@@ -56,7 +56,7 @@ public class MyHandler extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("jabber")) {
             cJabber = true;
         } else {
-            //only if contacts are processed other type of contact may occur
+            //only if contacts part is processed, other type of contact may be registered
             if (bContacts) {
                 cOther = true;
             }

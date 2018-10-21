@@ -1,11 +1,8 @@
 package com.mariusz.contacts.helpers;
 
-import org.springframework.stereotype.Component;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
 public class ContactTypeValidator {
 
     public static int validate(String contact){
